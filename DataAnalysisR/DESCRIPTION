@@ -1,0 +1,23 @@
+Package: DataAnalysisR
+Title: Data Analysis Toolkit in R
+Version: 0.0.0.9000
+Authors@R: 
+    person("Daves", "Tran", email = "trantiendat083@gmail.com", role = c("aut", "cre"))
+Description: A comprehensive toolkit for data analysis in R, integrating 
+    data manipulation, visualization, and database connectivity.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Remote: greatecology/gwalkr
+Imports:
+    R6,
+    tibble,
+    data.table,
+    dplyr,
+    ggplot2,
+    DBI,
+    odbc
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
