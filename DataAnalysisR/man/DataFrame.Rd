@@ -4,8 +4,66 @@
 \alias{DataFrame}
 \title{DataFrame Class}
 \description{
-A custom R6 class that provides an interface for handling tabular data using tibbles.
-It includes methods for initializing data, retrieving subsets, and performing basic table operations.
+A custom R6 class for handling tabular data using tibbles.
+It provides methods for data manipulation, filtering, exporting, and more.
+}
+\examples{
+
+## ------------------------------------------------
+## Method `DataFrame$add_a_new_entry`
+## ------------------------------------------------
+
+df$add_a_new_entry(addRow = TRUE, added_row = c(Name = "Emy", Age = 45, Score = 65))
+df$add_a_new_entry(addRow = FALSE, new_col_name = "Check", added_col = c(TRUE, FALSE, TRUE))
+
+## ------------------------------------------------
+## Method `DataFrame$add_multi_entries`
+## ------------------------------------------------
+
+df = DataFrame$new(Name = c("Alice", "Bob"), Age = c(25, 30))
+new_columns = tibble::tibble(Score = c(88, 92))
+df$add_multi_entries(add_rows = FALSE, new_cols = new_columns) # Adds a new column
+
+new_rows = tibble::tibble(Name = c("Charlie"), Age = c(35))
+df$add_multi_entries(add_rows = TRUE, new_rows = new_rows) # Adds a new row
+
+
+## ------------------------------------------------
+## Method `DataFrame$describe`
+## ------------------------------------------------
+
+df$describe()  # Display summary statistics for the DataFrame
+
+## ------------------------------------------------
+## Method `DataFrame$filter`
+## ------------------------------------------------
+
+df$filter(query = "Age > 30")                # Returns rows where Age > 30
+df$filter(query = "Score >= 85 & Age < 40")  # Returns rows where both conditions are met
+df$filter(query = "Name == 'Alice'")         # Filters for Alice
+df$filter(query = "Name != 'Eve'")           # Excludes Eve
+df$filter(query = "Score > 90 | Age < 25")   # Returns rows where Score > 90 OR Age < 25
+
+throws Error if the query is not a character string.
+throws Error if the query is empty (`NULL`).
+throws Error if the query references columns that do not exist in the DataFrame.
+
+## ------------------------------------------------
+## Method `DataFrame$export_to_file`
+## ------------------------------------------------
+
+df$export_to_file("my_data", "csv")  # Exports as "my_data.csv"
+df$export_to_file("output.xlsx", "xlsx")  # Keeps "output.xlsx"
+df$export_to_file("dataset", "json")  # Saves as "dataset.json"
+
+
+## ------------------------------------------------
+## Method `DataFrame$import_from_file`
+## ------------------------------------------------
+
+df = import_from_file("data.csv")   # Imports CSV file
+df = import_from_file("data.json")  # Imports JSON file as tibble
+df = import_from_file("data.xlsx")  # Imports Excel file
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -13,9 +71,17 @@ It includes methods for initializing data, retrieving subsets, and performing ba
 \item \href{#method-DataFrame-new}{\code{DataFrame$new()}}
 \item \href{#method-DataFrame-show_dp}{\code{DataFrame$show_dp()}}
 \item \href{#method-DataFrame-get_data}{\code{DataFrame$get_data()}}
+\item \href{#method-DataFrame-set_data}{\code{DataFrame$set_data()}}
 \item \href{#method-DataFrame-get_col}{\code{DataFrame$get_col()}}
 \item \href{#method-DataFrame-get_size}{\code{DataFrame$get_size()}}
 \item \href{#method-DataFrame-select}{\code{DataFrame$select()}}
+\item \href{#method-DataFrame-delete}{\code{DataFrame$delete()}}
+\item \href{#method-DataFrame-add_a_new_entry}{\code{DataFrame$add_a_new_entry()}}
+\item \href{#method-DataFrame-add_multi_entries}{\code{DataFrame$add_multi_entries()}}
+\item \href{#method-DataFrame-describe}{\code{DataFrame$describe()}}
+\item \href{#method-DataFrame-filter}{\code{DataFrame$filter()}}
+\item \href{#method-DataFrame-export_to_file}{\code{DataFrame$export_to_file()}}
+\item \href{#method-DataFrame-import_from_file}{\code{DataFrame$import_from_file()}}
 \item \href{#method-DataFrame-test}{\code{DataFrame$test()}}
 \item \href{#method-DataFrame-clone}{\code{DataFrame$clone()}}
 }
@@ -58,6 +124,28 @@ Retrieves the entire stored tibble.
 
 \subsection{Returns}{
 A tibble containing all the stored data.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataFrame-set_data"></a>}}
+\if{latex}{\out{\hypertarget{method-DataFrame-set_data}{}}}
+\subsection{Method \code{set_data()}}{
+the setter of the data
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataFrame$set_data(input_table)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input_table}}{\itemize{
+\item a tibble or any object can convert to tibble
+}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+NULL
 }
 }
 \if{html}{\out{<hr>}}
@@ -120,6 +208,285 @@ Selects specific rows and columns from the DataFrame.
 A tibble subset of \code{private$data}.
 throws an  Error if row or column indices exceed table dimensions.
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataFrame-delete"></a>}}
+\if{latex}{\out{\hypertarget{method-DataFrame-delete}{}}}
+\subsection{Method \code{delete()}}{
+Delete a row or column in the DataFrame
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataFrame$delete(delRow = FALSE, col_names = NULL, row_indexes = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{delRow}}{Logical. If TRUE, delete rows. If FALSE, delete columns.}
+
+\item{\code{col_names}}{Character vector. Column names to delete (used if \code{delRow = FALSE}).}
+
+\item{\code{row_indexes}}{Integer vector. Row indices to delete (used if \code{delRow = TRUE}).}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+the modified table
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataFrame-add_a_new_entry"></a>}}
+\if{latex}{\out{\hypertarget{method-DataFrame-add_a_new_entry}{}}}
+\subsection{Method \code{add_a_new_entry()}}{
+Adds a new row or column to the DataFrame.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataFrame$add_a_new_entry(
+  addRow = FALSE,
+  added_row = NULL,
+  added_col = NULL,
+  new_col_name = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{addRow}}{Logical. If TRUE, a new row is added; if FALSE, a new column is added.}
+
+\item{\code{added_row}}{A named vector representing the row to be added. The names should match column names in the DataFrame.}
+
+\item{\code{added_col}}{A vector representing the column to be added. Must have a length equal to the number of rows in the DataFrame.}
+
+\item{\code{new_col_name}}{A string specifying the name of the new column to be added.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+\itemize{
+\item If \code{addRow = TRUE} and \code{added_row} is provided, the function adds a new row with matching column names.
+\item If column names are missing in \code{added_row}, they are automatically filled with \code{NA} values.
+\item The function ensures that new row values match the data types of the existing columns.
+\item If \code{added_row} is NULL, an empty row (filled with \code{NA}) is added.
+\item If \code{addRow = FALSE}, the function attempts to add a new column.
+\item \code{added_col} must be a vector with a length equal to the number of existing rows.
+\item The function ensures the column is correctly named and matches existing data structures.
+}
+}
+
+\subsection{Returns}{
+The modified DataFrame with the new row or column added.
+
+throws
+\itemize{
+\item If \code{added_row} is not a vector.
+\item If \code{added_col} has an incorrect length.
+\item If \code{new_col_name} is missing when adding a new column.
+}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{df$add_a_new_entry(addRow = TRUE, added_row = c(Name = "Emy", Age = 45, Score = 65))
+df$add_a_new_entry(addRow = FALSE, new_col_name = "Check", added_col = c(TRUE, FALSE, TRUE))
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataFrame-add_multi_entries"></a>}}
+\if{latex}{\out{\hypertarget{method-DataFrame-add_multi_entries}{}}}
+\subsection{Method \code{add_multi_entries()}}{
+This function allows adding multiple rows or multiple columns to the data table.
+It ensures that new rows match the existing column names and structure, and new columns are
+provided in a valid tibble format.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataFrame$add_multi_entries(add_rows = FALSE, new_cols = NULL, new_rows = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{add_rows}}{Logical; if \code{TRUE}, new rows are added. If \code{FALSE}, new columns are added.}
+
+\item{\code{new_cols}}{A tibble containing new columns to be added to the data table. Must be a valid tibble.}
+
+\item{\code{new_rows}}{A tibble containing new rows to be added to the data table. The column names must match
+the existing data structure.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+\itemize{
+\item If \code{add_rows = FALSE}, \code{new_cols} must be a non-null tibble with new columns to be added.
+\item If \code{add_rows = TRUE}, \code{new_rows} must be a non-null tibble with columns (that must-contains all the columns) of the existing data.
+\item The function ensures data integrity by verifying types and column consistency before adding new rows or columns.
+}
+}
+
+\subsection{Returns}{
+NULL (modifies \code{private$data} in place)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{df = DataFrame$new(Name = c("Alice", "Bob"), Age = c(25, 30))
+new_columns = tibble::tibble(Score = c(88, 92))
+df$add_multi_entries(add_rows = FALSE, new_cols = new_columns) # Adds a new column
+
+new_rows = tibble::tibble(Name = c("Charlie"), Age = c(35))
+df$add_multi_entries(add_rows = TRUE, new_rows = new_rows) # Adds a new row
+
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataFrame-describe"></a>}}
+\if{latex}{\out{\hypertarget{method-DataFrame-describe}{}}}
+\subsection{Method \code{describe()}}{
+Provides a detailed summary of the DataFrame, including
+statistics, missing values, and distribution of numerical
+and categorical columns.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataFrame$describe()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+This method uses the \code{skimr::skim()} function to generate
+an enhanced summary of the dataset. It provides insights such as
+mean, median, standard deviation, and missing values for each column.
+}
+
+\subsection{Returns}{
+NULL (The summary is printed to the console)
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{df$describe()  # Display summary statistics for the DataFrame
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataFrame-filter"></a>}}
+\if{latex}{\out{\hypertarget{method-DataFrame-filter}{}}}
+\subsection{Method \code{filter()}}{
+Filters the DataFrame based on a specified query string.
+This function allows users to filter rows in a tibble using R's logical syntax.
+The query must reference column names exactly as they appear in the data.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataFrame$filter(query = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{query}}{A character string representing the filtering condition.
+- Use column names exactly as they appear in the DataFrame.
+- Logical operators allowed:
+- \code{&} (AND), \code{|} (OR), \code{==} (equal), \code{!=} (not equal),
+\code{>} \code{<} \code{>=} \code{<=} (comparisons).
+- String values must be enclosed in single quotes (e.g., \code{"Name == 'Alice'"}).
+- Multiple conditions can be combined with \code{&} and \code{|} (e.g., \code{"Age > 30 & Score > 80"}).
+- Parentheses \verb{()} can be used to group conditions for clarity.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new \code{DataFrame} object containing the filtered rows.
+If no rows match, a warning is displayed, and an empty DataFrame is returned.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{df$filter(query = "Age > 30")                # Returns rows where Age > 30
+df$filter(query = "Score >= 85 & Age < 40")  # Returns rows where both conditions are met
+df$filter(query = "Name == 'Alice'")         # Filters for Alice
+df$filter(query = "Name != 'Eve'")           # Excludes Eve
+df$filter(query = "Score > 90 | Age < 25")   # Returns rows where Score > 90 OR Age < 25
+
+throws Error if the query is not a character string.
+throws Error if the query is empty (`NULL`).
+throws Error if the query references columns that do not exist in the DataFrame.
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataFrame-export_to_file"></a>}}
+\if{latex}{\out{\hypertarget{method-DataFrame-export_to_file}{}}}
+\subsection{Method \code{export_to_file()}}{
+Exports the current DataFrame to a file in the specified format.
+The function automatically detects if the filename contains an extension.
+If no extension is provided, it appends the appropriate extension based on the selected format.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataFrame$export_to_file(filename = "result", format = "csv")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{filename}}{A string representing the name of the output file. Defaults to \code{"result"}.
+If no extension is provided, the function will append the correct extension.}
+
+\item{\code{format}}{A string specifying the file format. Must be one of \code{"csv"}, \code{"tsv"}, \code{"xlsx"}, \code{"json"}, \code{"rds"}, \code{"parquet"}, or \code{"feather"}. Defaults to \code{"csv"}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+This function exports the \code{private$data} tibble to a file using appropriate export methods
+based on the chosen format. If the filename already contains a valid extension, it will not
+append another one. Otherwise, it appends the correct extension.
+}
+
+\subsection{Returns}{
+The function does not return a value; it saves the data to a file and displays a success message.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{df$export_to_file("my_data", "csv")  # Exports as "my_data.csv"
+df$export_to_file("output.xlsx", "xlsx")  # Keeps "output.xlsx"
+df$export_to_file("dataset", "json")  # Saves as "dataset.json"
+
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataFrame-import_from_file"></a>}}
+\if{latex}{\out{\hypertarget{method-DataFrame-import_from_file}{}}}
+\subsection{Method \code{import_from_file()}}{
+Automatically imports data from a file into a tibble based on its format.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataFrame$import_from_file(filename)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{filename}}{The name of the file to import (must include an extension).}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A tibble containing the imported data.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{df = import_from_file("data.csv")   # Imports CSV file
+df = import_from_file("data.json")  # Imports JSON file as tibble
+df = import_from_file("data.xlsx")  # Imports Excel file
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataFrame-test"></a>}}

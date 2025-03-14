@@ -12,12 +12,17 @@ df =  DataFrame$new(
   Score = c(88, 92, 95, 78, 85)
 )
 
-df$test()
+df$import_from_file("export.csv")
 
-sol = df$delete(delRow = FALSE, col_names = c("Name","Score"), row_indexes = c(1,2))
-print(sol)
+df$export_to_file(format="feather", filename= "export")
 
 df$get_data()
+
+filtering = df$filter(query=  "Age > 30 & Score > 88")
+filtering$show_dp()
+df$describe()
+
+df$test()
 
 
 test_tibble =  tibble(
@@ -27,9 +32,3 @@ test_tibble =  tibble(
   ID = c(0,1,2)
 )
 
-test_tibble
-
-test_tibble <- test_tibble %>% mutate(col_name = NULL)
-print(test_tibble)
-
-test_tibble = test_tibble %>% slice(-2) # Delete a row
