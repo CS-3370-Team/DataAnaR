@@ -1,4 +1,3 @@
-#' @title DataFrame Class
 #' @description A custom R6 class for handling tabular data using tibbles.
 #' It provides methods for data manipulation, filtering, exporting, and more.
 #'
@@ -13,7 +12,6 @@
 #' @importFrom writexl write_xlsx
 #' @importFrom jsonlite write_json
 #' @importFrom arrow write_parquet write_feather
-#' @importFrom base saveRDS
 #' @importFrom tools file_ext
 #'
 #' @export
@@ -26,6 +24,7 @@ DataFrame = R6::R6Class("DataFrame",
                                 #' @description Initializes the DataFrame with named vectors as columns.
                                 #' @param ... Named vectors that form the columns of the DataFrame.
                                 #' @export
+
                                 initialize = function(...) {
                                    input_list <- list(...)  # Capture all arguments into a list
                                    private$data <- tibble::as_tibble(input_list)  # Convert to tibble
@@ -43,8 +42,20 @@ DataFrame = R6::R6Class("DataFrame",
                                 get_data = function() {
                                  return(private$data)
                                },
-
-
+                                 #' @description
+                                 #' Retrieves the column names from the private `data` field.
+                                 #'
+                                 #' @return
+                                 #' A character vector containing the names of the columns in the `data` tibble.
+                                 #'
+                                 #' @examples
+                                 #' \dontrun{
+                                 #'   obj <- MyClass$new(data = tibble::tibble(a = 1, b = 2))
+                                 #'   obj$get_col_names()
+                                 #' }
+                                get_col_names = function() {
+                                 return(colnames(private$data))
+                                },
                                 #' @description the setter of the data
                                 #' @return NULL
                                 #' @param input_table - a tibble or any object can convert to tibble
@@ -331,7 +342,6 @@ DataFrame = R6::R6Class("DataFrame",
                                print(skimr::skim(private$data))
                                return(NULL)
                             },
-
 
                             #' @description Filters the DataFrame based on a specified query string.
                             #' This function allows users to filter rows in a tibble using R's logical syntax.

@@ -26,7 +26,13 @@ Imports:
     writexl,    
     jsonlite,   
     arrow,       
-    tools        
+    tools,
+    plotly,
+    GWalkR,
+    patchwork,
+    formattable,
+    knitr,
+    pander
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
