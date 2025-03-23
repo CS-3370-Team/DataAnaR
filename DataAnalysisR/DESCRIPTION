@@ -2,7 +2,12 @@ Package: DataAnalysisR
 Title: Data Analysis Toolkit in R
 Version: 0.0.0.9000
 Authors@R: 
-    person("Daves", "Tran", email = "trantiendat083@gmail.com", role = c("aut", "cre"))
+    c(
+        person("Daves", "Tran", email = "trantiendat083@gmail.com", role = c("aut", "cre")),
+        person("Cuong", "Nguyen", email="tuancuong112504@gmail.com", role =c("cre", "ctb")),
+        person("Dung", "Nguyen", email="dung.nkv207947@sis.hust.edu.vn", role =c("cre", "ctb")),
+        person("An", "Nguyen", email="haiann663@gmail.com", role =c("cre", "ctb"))
+    )
 Description: A comprehensive toolkit for data analysis in R, integrating 
     data manipulation, visualization, and database connectivity.
 License: MIT + file LICENSE
