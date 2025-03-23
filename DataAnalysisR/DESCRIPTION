@@ -19,6 +19,7 @@ Imports:
     DBI,
     magrittr,
     odbc,
+    RMariaDB,
     rlang,       
     skimr,      
     readr,      
