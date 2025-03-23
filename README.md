@@ -6,17 +6,17 @@ DataAnaR is an R package designed for Data Analysis, developed for the CS-3370 c
 
 The DataFrame module allows users to work with tabular data in a flexible and intuitive way. It includes features such as creating, manipulating, and filtering data stored in DataFrame objects. Users can easily transform data, add or remove columns, perform basic filtering, and export the data to various formats like CSV, JSON, and more.
 
-## 2. BeautifulTable Module (In Development)
+## 2. BeautifulTable Module (Completed)
 
 The BeautifulTable module will help users create aesthetically pleasing tables. This module will enable customization of table appearance, including alignment, formatting, and color schemes, for enhanced readability and presentation.
 
-## 3. Visualization Module (In Development)
+## 3. Visualization Module (Completed)
 
 The Visualization module will provide interactive data visualizations, helping users to easily interpret their data through charts, graphs, and other visual representations. This module will support various types of visualizations and allow users to interact with the charts to explore the data in more depth.
 
-## 4. DataBaseUtil Module (In Development)
+## 4. DataBaseUtil Module (Completed)
 
-The DataBaseUtil module will facilitate easy database connectivity. Users will be able to connect to different databases, fetch data, and perform various operations like querying and storing data, making it easier to work with large datasets directly from a database.
+The DataBaseUtil module will facilitate easy database connectivity. Users will be able to connect to different databases (include MySQL and Azure SQL), fetch data, and perform various operations like querying and storing data, making it easier to work with large datasets directly from a database.
 
 
 ## Contributing
