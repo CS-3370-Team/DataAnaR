@@ -1,38 +1,55 @@
-DatabaseConnector <- R6Class("DatabaseConnector",
+#' @title DatabaseConnector
+#' @description R6 Class for connecting and interacting with various databases (MySQL,Azure SQL).
+#' @field con Database connection object (NULL if disconnected)
+#' @importFrom R6 R6Class
+#' @importFrom DBI dbConnect dbDisconnect dbGetQuery dbExecute
+#' @importFrom RMariaDB MariaDB
+#' @importFrom odbc odbc
+#' @importFrom tibble as_tibble
+#' @export
+DatabaseConnector <- R6::R6Class("DatabaseConnector",
                              public = list(
                                con = NULL,  # Connection object
 
-                               # Constructor
+                               #' @description Initialize the connector (no active connection)
                                initialize = function() {
                                  self$con <- NULL
                                },
 
-                               # Connect to a database with parameters
-                               connect_db = function(db_type, host, port, dbname, user, password, sid = NULL) {
+                               #' @description Connect to the database
+                               #' @param db_type Type of database: "mysql", "azure"
+                               #' @param host Host address
+                               #' @param port Port number (optional)
+                               #' @param dbname Database name
+                               #' @param user Username
+                               #' @param password Password
+                               #' @param in_drv Input Driver File (for Azure only)
+                               #' @return TRUE if connection successful, FALSE otherwise
+                               connect_db = function(db_type, host, port, dbname, user, password, in_drv = NULL) {
                                  tryCatch({
                                    if (db_type == "mysql") {
-                                     self$con <- dbConnect(MariaDB(),
+                                     self$con <- DBI::dbConnect(MariaDB::MariaDB(),
                                                            host = host,
                                                            port = port,
                                                            dbname = dbname,
                                                            user = user,
                                                            password = password)
                                      cat("MySQL connection successful!\n")
-                                   } else if (db_type == "oracle") {
-                                     drv <- Oracle()
-                                     self$con <- dbConnect(drv,
-                                                           username = user,
-                                                           password = password,
-                                                           dbname = paste0("(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=", host, ")(PORT=", port, "))) (CONNECT_DATA=(SID=", sid, ")))"))
-                                     cat("Oracle SQL connection successful!\n")
                                    } else if (db_type == "azure") {
-                                     driver <- "ODBC Driver 17 for SQL Server"
-                                     self$con <- dbConnect(odbc::odbc(),
-                                                           Driver = driver,
-                                                           Server = host,
-                                                           Database = dbname,
-                                                           UID = user,
-                                                           PWD = password)
+                                     if (is.null(in_drv)) {
+                                       driver <- "ODBC Driver 18 for SQL Server"
+                                     } else {
+                                       driver = in_drv
+                                     }
+                                     self$con <- DBI::dbConnect(odbc::odbc(),
+                                                                Driver = driver,
+                                                                Server = host,
+                                                                Database = dbname,
+                                                                UID = user,
+                                                                PWD = password,
+                                                                Encrypt = "yes",
+                                                                TrustServerCertificate = "no",
+                                                                ConnectionTimeout = 30)
                                      cat("Azure SQL connection successful!\n")
                                    } else {
                                      stop("Unsupported database type.")
@@ -44,6 +61,9 @@ DatabaseConnector <- R6Class("DatabaseConnector",
                                  })
                                },
 
+                               #' @description Fetch a table as a DataFrame (tibble)
+                               #' @param table_name Name of the table
+                               #' @return tibble with data
                                fetch_table_as_dataframe = function(table_name) {
                                  if (is.null(self$con)) {
                                    stop("No active database connection.")
@@ -52,7 +72,7 @@ DatabaseConnector <- R6Class("DatabaseConnector",
                                  query <- paste("SELECT * FROM", table_name)
 
                                  tryCatch({
-                                   data <- dbGetQuery(self$con, query)  # Fetch data from the database
+                                   data <- DBI::dbGetQuery(self$con, query)  # Fetch data from the database
 
                                    # Ensure the data has valid column names
                                    if (is.null(colnames(data)) || any(colnames(data) == "")) {
@@ -60,7 +80,7 @@ DatabaseConnector <- R6Class("DatabaseConnector",
                                    }
 
                                    # Convert to tibble (ensures compatibility with DataFrame)
-                                   data_tibble <- as_tibble(data)
+                                   data_tibble <- tibble::as_tibble(data)
 
                                    # Convert tibble to DataFrame
                                    df <- DataFrame$new(input_table = data_tibble)
@@ -71,6 +91,9 @@ DatabaseConnector <- R6Class("DatabaseConnector",
                                  })
                                },
 
+                               #' @description Add a record to a table
+                               #' @param table_name Name of the table
+                               #' @param data_list Named list of column = value pairs
                                add_record = function(table_name, data_list) {
                                  if (is.null(self$con)) {
                                    stop("No active database connection.")
@@ -83,7 +106,7 @@ DatabaseConnector <- R6Class("DatabaseConnector",
                                  query <- sprintf("INSERT INTO %s (%s) VALUES (%s)", table_name, columns, values)
 
                                  tryCatch({
-                                   rows_affected <- dbExecute(self$con, query)
+                                   rows_affected <- DBI::dbExecute(self$con, query)
                                    if (rows_affected > 0) {
                                      cat("Record added successfully to", table_name, "\n")
                                    } else {
@@ -94,6 +117,10 @@ DatabaseConnector <- R6Class("DatabaseConnector",
                                  })
                                },
 
+                               #' @description Remove a record from a table
+                               #' @param table_name Name of the table
+                               #' @param col Column name for condition
+                               #' @param value Value to match
                                remove_record = function(table_name, col, value) {
                                  if (is.null(self$con)) {
                                    stop("No active database connection.")
@@ -107,7 +134,7 @@ DatabaseConnector <- R6Class("DatabaseConnector",
                                  }
 
                                  tryCatch({
-                                   rows_affected <- dbExecute(self$con, query)
+                                   rows_affected <- DBI::dbExecute(self$con, query)
 
                                    if (rows_affected > 0) {
                                      cat("Record removed successfully from", table_name, "\n")
@@ -120,11 +147,10 @@ DatabaseConnector <- R6Class("DatabaseConnector",
                                  })
                                },
 
-
-                               # Disconnect from the database
+                               #' @description Disconnect from the database
                                disconnect = function() {
                                  if (!is.null(self$con)) {
-                                   dbDisconnect(self$con)
+                                   DBI::dbDisconnect(self$con)
                                    self$con <- NULL
                                    cat("Disconnected from database.\n")
                                  } else {
