@@ -10,11 +10,11 @@ The DataFrame module allows users to work with tabular data in a flexible and in
 
 The BeautifulTable module will help users create aesthetically pleasing tables. This module will enable customization of table appearance, including alignment, formatting, and color schemes, for enhanced readability and presentation.
 
-## 3. Visualization Module (Completed)
+## 3. Visualizer Module (Completed)
 
 The Visualization module will provide interactive data visualizations, helping users to easily interpret their data through charts, graphs, and other visual representations. This module will support various types of visualizations and allow users to interact with the charts to explore the data in more depth.
 
-## 4. DataBaseUtil Module (Completed)
+## 4. DatabaseConnect Module (Completed)
 
 The DataBaseUtil module will facilitate easy database connectivity. Users will be able to connect to different databases (include MySQL and Azure SQL), fetch data, and perform various operations like querying and storing data, making it easier to work with large datasets directly from a database.
 
