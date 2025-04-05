@@ -33,6 +33,74 @@ Contributors:
  
 	•	Nguyen Khanh Viet Dung – Contributor for the DataBaseUtil Module
 
+## How to use the package
+
+## 🔧 Installation
+
+1. **Install `devtools`** (if it's not already installed):
+
+```r
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
+```
+2.	Install the package from your local .tar.gz file:
+```r
+install.packages("path/to/DataAnalysisR_0.0.0.9000.tar.gz", repos = NULL, type = "source")
+```
+3.  Load the Package 
+```r
+library(DataAnalysisR)
+```
+Now you’re ready to use the tools provided by DataAnalysisR!
+
+4.  Example on how to use the package
+```r
+
+# Create a new DataFrame object
+test_df <- DataFrame$new()
+
+# Run tests on the DataFrame object
+test_df$test()
+
+# Import data from a CSV file into the DataFrame
+file_path <- ".../weather_features.csv" # Replace with your actual CSV file
+test_df$import_from_file(file_path)
+
+# Display basic statistics about the DataFrame
+test_df$describe()
+
+# Show data preview (first few rows)
+test_df$show_dp()
+
+# Create a BeautifulTable object and print the table in various formats
+beautiful_tab <- BeautifulTable$new(test_df)
+beautiful_tab$print_the_table("simple")
+beautiful_tab$print_the_table("formattable")
+beautiful_tab$print_the_table("pander")
+beautiful_tab$print_the_table("markdown")
+
+# Create a Visualizer object and generate visualizations
+visual <- Visualizer$new(test_df)
+
+# Plot interactive visualization
+visual$plot_interactive()
+
+# Plot a scatter plot with specified columns
+visual$plot_scatter(x_col = "temp", y_col = "wind_speed")
+visual$plot_line(x_col = "temp", y_col = "wind_speed")
+visual$plot_box( y_col = "temp")
+visual$plot_line(x_col = "temp", y_col = "humidity")
+visual$plot_histogram(x_col="wind_speed")
+
+# Plot a 3D scatter plot with specified columns
+visual$plot_3d(x_col = "temp", y_col = "humidity", z_col = "wind_speed")
+
+visual$plot_interactive()
+visual$plot_heatmap(x_col = "generation biomass", y_col = "generation nuclear", value_col = "generation nuclear")
+
+```
+
 
 ## License
 
