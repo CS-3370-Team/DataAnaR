@@ -189,16 +189,24 @@ Visualizer = R6::R6Class("Visualizer",
                            #' @return plotly object or NULL.
                            #' @export
                            plot_3d = function(x_col, y_col, z_col) {
-                             if (!private$check_columns(3, c(x_col, y_col, z_col))) return(NULL)
+                             # Retrieve the data
+                             df = private$df$get_data()
 
+                             # Ensure the specified columns exist in the dataframe
+                             if (!(all(c(x_col, y_col, z_col) %in% colnames(df)))) {
+                               stop("One or more specified columns do not exist in the dataframe.")
+                             }
+
+                             # Create the 3D scatter plot
                              p = plotly::plot_ly(
-                               data = private$df$get_data(),
-                               x = as.formula(paste0("~", x_col)),
-                               y = as.formula(paste0("~", y_col)),
-                               z = as.formula(paste0("~", z_col)),
+                               data = df,
+                               x = ~df[[x_col]],  # Dynamically reference tibble columns with [[]]
+                               y = ~df[[y_col]],
+                               z = ~df[[z_col]],
                                type = "scatter3d",
                                mode = "markers"
                              )
+
                              message("✅ 3D scatter plot created.")
                              return(p)
                            },

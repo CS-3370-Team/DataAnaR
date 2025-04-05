@@ -2,12 +2,21 @@
 % Please edit documentation in R/DataFrame.R
 \name{DataFrame}
 \alias{DataFrame}
-\title{DataFrame Class}
+\title{Add Multiple Rows or Columns to the Data Table}
 \description{
 A custom R6 class for handling tabular data using tibbles.
 It provides methods for data manipulation, filtering, exporting, and more.
 }
 \examples{
+
+## ------------------------------------------------
+## Method `DataFrame$get_col_names`
+## ------------------------------------------------
+
+\dontrun{
+  obj <- MyClass$new(data = tibble::tibble(a = 1, b = 2))
+  obj$get_col_names()
+}
 
 ## ------------------------------------------------
 ## Method `DataFrame$add_a_new_entry`
@@ -71,6 +80,7 @@ df = import_from_file("data.xlsx")  # Imports Excel file
 \item \href{#method-DataFrame-new}{\code{DataFrame$new()}}
 \item \href{#method-DataFrame-show_dp}{\code{DataFrame$show_dp()}}
 \item \href{#method-DataFrame-get_data}{\code{DataFrame$get_data()}}
+\item \href{#method-DataFrame-get_col_names}{\code{DataFrame$get_col_names()}}
 \item \href{#method-DataFrame-set_data}{\code{DataFrame$set_data()}}
 \item \href{#method-DataFrame-get_col}{\code{DataFrame$get_col()}}
 \item \href{#method-DataFrame-get_size}{\code{DataFrame$get_size()}}
@@ -125,6 +135,30 @@ Retrieves the entire stored tibble.
 \subsection{Returns}{
 A tibble containing all the stored data.
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataFrame-get_col_names"></a>}}
+\if{latex}{\out{\hypertarget{method-DataFrame-get_col_names}{}}}
+\subsection{Method \code{get_col_names()}}{
+Retrieves the column names from the private \code{data} field.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataFrame$get_col_names()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A character vector containing the names of the columns in the \code{data} tibble.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\dontrun{
+  obj <- MyClass$new(data = tibble::tibble(a = 1, b = 2))
+  obj$get_col_names()
+}
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataFrame-set_data"></a>}}
