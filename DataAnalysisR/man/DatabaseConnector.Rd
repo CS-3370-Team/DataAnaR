@@ -55,7 +55,7 @@ Connect to the database
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{db_type}}{Type of database: "mysql", "azure"}
+\item{\code{db_type}}{Type of database: "mysql", "azure", "PostGres"}
 
 \item{\code{host}}{Host address}
 

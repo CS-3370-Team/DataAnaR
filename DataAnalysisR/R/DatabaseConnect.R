@@ -6,6 +6,7 @@
 #' @importFrom RMariaDB MariaDB
 #' @importFrom odbc odbc
 #' @importFrom tibble as_tibble
+#' @importFrom RPostgres Postgres
 #' @export
 DatabaseConnector <- R6::R6Class("DatabaseConnector",
                              public = list(
@@ -17,7 +18,7 @@ DatabaseConnector <- R6::R6Class("DatabaseConnector",
                                },
 
                                #' @description Connect to the database
-                               #' @param db_type Type of database: "mysql", "azure"
+                               #' @param db_type Type of database: "mysql", "azure", "PostGres"
                                #' @param host Host address
                                #' @param port Port number (optional)
                                #' @param dbname Database name
@@ -51,6 +52,17 @@ DatabaseConnector <- R6::R6Class("DatabaseConnector",
                                                                 TrustServerCertificate = "no",
                                                                 ConnectionTimeout = 30)
                                      cat("Azure SQL connection successful!\n")
+                                   }
+                                   else if(db_type == "PostGres") {
+                                         self$con <- DBI::dbConnect(
+                                           RPostgres::Postgres(),
+                                           dbname = dbname,
+                                           host = host,
+                                           port = port,
+                                           user = user,
+                                           password = password
+                                         )
+                                        cat("PostgresSQL connection successful!\n")
                                    } else {
                                      stop("Unsupported database type.")
                                    }
