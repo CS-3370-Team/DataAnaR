@@ -16,7 +16,7 @@ The Visualization module will provide interactive data visualizations, helping u
 
 ## 4. DatabaseConnect Module (Completed)
 
-The DataBaseUtil module will facilitate easy database connectivity. Users will be able to connect to different databases (include MySQL and Azure SQL), fetch data, and perform various operations like querying and storing data, making it easier to work with large datasets directly from a database.
+The DataBaseUtil module will facilitate easy database connectivity. Users will be able to connect to different databases (include MySQL and Azure SQL, PostGresSQL), fetch data, and perform various operations like querying and storing data, making it easier to work with large datasets directly from a database.
 
 
 ## Contributing
