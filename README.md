@@ -21,9 +21,15 @@ The DataBaseUtil module will facilitate easy database connectivity. Users will b
 
 ## Contributing
 
-We welcome contributions! If you’d like to improve the package, you can fork the repository, make your changes, and submit a pull request. Feel free to open issues if you encounter any bugs or have suggestions.
+We welcome contributions! If you’d like to improve the package, you can fork the repository, make changes, and submit a pull request. Feel free to open issues if you encounter any bugs or have suggestions, if you want to add your source code to this project **fork this repository**, create a feature branch, and submit a pull request.
 
-Contributors:
+1. Fork the repo
+2. Create your feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes
+4. Push to your fork (`git push origin feature/your-feature`)
+5. Open a Pull Request
+
+### Contributors:
 
 	•	Dat Tran Tien (Daves Tran) – Team Leader & Contributor for the DataFrame Module
  
