@@ -99,6 +99,25 @@ visual$plot_3d(x_col = "temp", y_col = "humidity", z_col = "wind_speed")
 visual$plot_interactive()
 visual$plot_heatmap(x_col = "generation biomass", y_col = "generation nuclear", value_col = "generation nuclear")
 
+# Initialize the DatabaseConnector
+db <- DatabaseConnector$new()
+
+# Connect to a MySQL database
+db$connect_db("mysql", host = "localhost", port = 3306, dbname = "test_db", user = "root", password = "password")
+
+# Fetch a table as a tibble
+users <- db$fetch_table_as_dataframe("users")
+print(users$get_data())
+
+# Add a new record to the table
+db$add_record("users", list(name = "John Doe", age = 30, email = "john.doe@example.com"))
+
+# Remove a record from the table
+db$remove_record("users", "name", "John Doe")
+
+# Disconnect from the database
+db$disconnect()
+
 ```
 
 
